@@ -69,16 +69,20 @@ public class NewUserViewController implements Initializable {
         }
         fileChooser.setInitialDirectory(userDirectory);
         
-        imageFile = fileChooser.showOpenDialog(stage);
+        File tempImageFile = fileChooser.showOpenDialog(stage);
         
-        if (imageFile.isFile()) {
-            try {
-                BufferedImage bufferedImage = ImageIO.read(imageFile);
-                Image img = SwingFXUtils.toFXImage(bufferedImage, null);
-                imageView.setImage(img);
-            }
-            catch (IOException e) {
-                System.err.println(e.getMessage());
+        if (tempImageFile != null) {
+            imageFile = tempImageFile;
+
+            if (imageFile != null) {
+                try {
+                    BufferedImage bufferedImage = ImageIO.read(imageFile);
+                    Image img = SwingFXUtils.toFXImage(bufferedImage, null);
+                    imageView.setImage(img);
+                }
+                catch (IOException e) {
+                    System.err.println(e.getMessage());
+                }
             }
         }
         
