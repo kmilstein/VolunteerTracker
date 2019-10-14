@@ -54,7 +54,7 @@
                   <VBox alignment="CENTER" prefHeight="248.0" prefWidth="332.0" spacing="20.0">
                      <children>
                         <ImageView fx:id="imageView" fitHeight="201.0" fitWidth="317.0" pickOnBounds="true" preserveRatio="true" />
-                        <Button mnemonicParsing="false" onAction="#saveVolunteerButtonPushed" text="Change Image" />
+                        <Button mnemonicParsing="false" onAction="#chooseImageButtonPushed" text="Change Image" />
                      </children>
                   </VBox>
                </children>
