@@ -45,6 +45,7 @@ public class NewUserViewController implements Initializable {
     private ImageView imageView;
     
     private File imageFile;
+    private boolean imageFileChanged;
     
     /**
      * This method opens a FileChooser object to allow the user to browse for a new
@@ -79,6 +80,7 @@ public class NewUserViewController implements Initializable {
                     BufferedImage bufferedImage = ImageIO.read(imageFile);
                     Image img = SwingFXUtils.toFXImage(bufferedImage, null);
                     imageView.setImage(img);
+                    imageFileChanged = true;
                 }
                 catch (IOException e) {
                     System.err.println(e.getMessage());
@@ -94,7 +96,12 @@ public class NewUserViewController implements Initializable {
      */
     public void saveVolunteerButtonPushed(ActionEvent event) {
         try {
-            Volunteer volunteer = new Volunteer(firstNameTextField.getText(), lastNameTextField.getText(), phoneTextField.getText(), birthday.getValue());
+            Volunteer volunteer;
+            if (imageFileChanged) {
+                volunteer = new Volunteer(firstNameTextField.getText(), lastNameTextField.getText(), phoneTextField.getText(), birthday.getValue(), imageFile);
+            }else {
+                volunteer = new Volunteer(firstNameTextField.getText(), lastNameTextField.getText(), phoneTextField.getText(), birthday.getValue());
+            }
             errMsgLabel.setText("");
             volunteer.insertIntoDataBase();
         } catch (Exception e) {
@@ -107,6 +114,7 @@ public class NewUserViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        imageFileChanged = false;
         errMsgLabel.setText("");
     
         try {
