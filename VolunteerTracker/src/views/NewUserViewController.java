@@ -114,6 +114,7 @@ public class NewUserViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        birthday.setValue(LocalDate.now().minusYears(18));
         imageFileChanged = false;
         errMsgLabel.setText("");
     
