@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.SecureRandom;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -183,5 +184,38 @@ public class Volunteer {
      */
     public String toString() {
         return String.format("%s %s is %d years old", firstName, lastName, Period.between(birthday, LocalDate.now()).getYears());
+    }
+
+    /**
+     * This method will write the instance of the volunteer into the database
+     */
+    public void insertIntoDataBase() throws SQLException {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/volunteer", "root", "MySQLPassword1");
+            String sql = "INSERT INTO volunteers (firstName, lastName, phoneNumber, birthday, imageFile)" +
+                    "VALUES (?, ?, ?, ?, ?)";
+            preparedStatement = conn.prepareStatement(sql);
+            
+            Date db = Date.valueOf(birthday);
+            
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setString(3, phoneNumber);
+            preparedStatement.setDate(4, db);
+            preparedStatement.setString(5, imageFile.getName());
+            
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        finally {
+            if (preparedStatement != null)
+                preparedStatement.close();
+            if (conn != null)
+                conn.close();
+        }
     }
 }
