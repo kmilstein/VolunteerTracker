@@ -1,4 +1,3 @@
-
 package views;
 
 import java.awt.image.BufferedImage;
@@ -6,12 +5,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ResourceBundle;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
@@ -49,7 +46,8 @@ public class NewUserViewController implements Initializable {
     
     /**
      * This method opens a FileChooser object to allow the user to browse for a new
-     * image file. When that is completed, it will update the view to the a new image.
+     * image file.When that is completed, it will update the view to the a new image.
+     * @param event
      */
     public void chooseImageButtonPushed(ActionEvent event) {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -94,7 +92,7 @@ public class NewUserViewController implements Initializable {
      * This method will read from the scene and try to create a new instance of a Volunteer
      * If a volunteer was successfully created, it is updated in the database.
      */
-    public void saveVolunteerButtonPushed(ActionEvent event) {
+    public void saveVolunteerButtonPushed() {
         try {
             Volunteer volunteer;
             if (imageFileChanged) {
@@ -111,6 +109,8 @@ public class NewUserViewController implements Initializable {
     
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

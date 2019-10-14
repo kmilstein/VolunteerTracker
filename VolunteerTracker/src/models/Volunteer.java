@@ -1,4 +1,3 @@
-
 package models;
 
 import java.io.File;
@@ -110,6 +109,7 @@ public class Volunteer {
     /**
      * This method will copy the file to the images directory on this server and give
      * it a unique name.
+     * @throws java.io.IOException
      */
     public void copyImageFile() throws IOException {
         //create a new path to copy the image into a local director
@@ -159,6 +159,8 @@ public class Volunteer {
     /**
      * This method will search the images directory and ensure that the file 
      * name is unique
+     * @param fileName
+     * @return 
      */
     public boolean uniqueFileInDirectory(String fileName) {
         File directory = new File("./src/images/");
@@ -175,6 +177,8 @@ public class Volunteer {
     /**
      * This method will validate if the given integer corresponds to a valid 
      * ASCII character that could be used in a file name
+     * @param asciiValue
+     * @return 
      */
     public boolean validCharacterValue(int asciiValue) {
         
@@ -194,21 +198,24 @@ public class Volunteer {
     }
     
     /**
-     * This method will return a formatted String with the person's first name, last name and age
+     * This method will return a formatted
+     * @return String with the person's first name, last name and age
      */
+    @Override
     public String toString() {
         return String.format("%s %s is %d years old", firstName, lastName, Period.between(birthday, LocalDate.now()).getYears());
     }
 
     /**
      * This method will write the instance of the volunteer into the database
+     * @throws java.sql.SQLException
      */
     public void insertIntoDataBase() throws SQLException {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/volunteer", "root", "MySQLPassword1");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/volunteer?autoReconnect=true&useSSL=false", "root", "MySQLPassword1");
             String sql = "INSERT INTO volunteers (firstName, lastName, phoneNumber, birthday, imageFile)" +
                     "VALUES (?, ?, ?, ?, ?)";
             preparedStatement = conn.prepareStatement(sql);
