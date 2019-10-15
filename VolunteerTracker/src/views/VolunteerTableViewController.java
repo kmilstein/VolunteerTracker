@@ -26,13 +26,14 @@ public class VolunteerTableViewController implements Initializable {
     @FXML
     private TableColumn<Volunteer, Integer> volunteerIDColumn;
     @FXML
-    private TableColumn<Volunteer, String> firstNameColumn;
+    private TableColumn<Volunteer, String> FirstNameColumn;
     @FXML
     private TableColumn<Volunteer, String> lastNameColumn;
     @FXML
     private TableColumn<Volunteer, String> phoneNumberColumn;
     @FXML
     private TableColumn<Volunteer, LocalDate> birthdayColumn;
+    
     /**
      * Initializes the controller class.
      * @param url
@@ -41,7 +42,7 @@ public class VolunteerTableViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         volunteerIDColumn.setCellValueFactory(new PropertyValueFactory<>("volunteerID"));
-        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        FirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         birthdayColumn.setCellValueFactory(new PropertyValueFactory<>("birthday"));
