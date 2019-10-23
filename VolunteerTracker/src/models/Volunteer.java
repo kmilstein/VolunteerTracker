@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.security.SecureRandom;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
@@ -41,7 +40,7 @@ public class Volunteer {
 
     public void setVolunteerID(int volunteerID) {
         if (volunteerID >= 0) {
-        this.volunteerID = volunteerID;
+            this.volunteerID = volunteerID;
         }
         else {
             throw new IllegalArgumentException("VolunteerID must be >= 0");
@@ -132,25 +131,20 @@ public class Volunteer {
      */
     private String getUniqueFileName(String oldFileName) {
         String newName;
-        
-        //create random number generator
-        SecureRandom rng = new SecureRandom();
-        
+        int count = 0;
+        String fileType = oldFileName.substring(oldFileName.indexOf("."));
+                
         //loop until we have a unique file name
         do {
             newName="";
             
-            //generatore 32 random characters
-            for (int i = 1; i <=32; i++) {
-                int nextChar;
+            newName=firstName+lastName+"photo";
+            
+            if (count > 0) 
+                newName+=count;
                 
-                do {
-                    nextChar = rng.nextInt(123);
-                    
-                } while(!validCharacterValue(nextChar));
-                newName = String.format("%s%c", newName, nextChar);
-            }
-            newName += oldFileName;
+            newName += fileType;
+            count++;
             
         } while (!uniqueFileInDirectory(newName));
         return newName;
@@ -173,30 +167,7 @@ public class Volunteer {
         }
         return true;
     }
-    
-    /**
-     * This method will validate if the given integer corresponds to a valid 
-     * ASCII character that could be used in a file name
-     * @param asciiValue
-     * @return 
-     */
-    public boolean validCharacterValue(int asciiValue) {
         
-        //0-9 = ASCII range 48 to 57
-        if (asciiValue >= 48 && asciiValue <= 57)
-            return true;
-        
-        //A-Z = ASCII range 65 to 90
-        if (asciiValue >= 65 && asciiValue <= 90)
-            return true;
-        
-        //a-z = ASCII range 97 to 122
-        if (asciiValue >= 97 && asciiValue <= 122)
-            return true;
-        
-        return false;
-    }
-    
     /**
      * This method will return a formatted
      * @return String with the person's first name, last name and age
@@ -237,6 +208,45 @@ public class Volunteer {
                 preparedStatement.close();
             if (conn != null)
                 conn.close();
+        }
+    }
+    
+    /**
+     * This will update the Volunteer in the database
+     */
+    public void updateVolunteerDataBase() throws SQLException {
+
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/volunteer?autoReconnect=true&useSSL=false", "root", "MySQLPassword1");           
+
+            String sql = "UPDATE volunteers SET firstName = ?, lastName = ?, phoneNumber = ?, birthday = ?, imageFile = ?"
+                    + "WHERE volunteerID  = ?";
+        
+            preparedStatement = conn.prepareStatement(sql);
+            
+            Date bd = Date.valueOf(birthday);
+            
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setString(3, phoneNumber);
+            preparedStatement.setDate(4, bd);
+            preparedStatement.setString(5, imageFile.getName());
+            preparedStatement.setInt(6, volunteerID);
+            
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        finally {
+            if (conn!=null)
+                conn.close();
+            if (preparedStatement != null)
+                preparedStatement.close();
         }
     }
 }

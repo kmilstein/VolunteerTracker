@@ -1,6 +1,7 @@
 package views;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -13,6 +14,9 @@ import models.Volunteer;
 import java.sql.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
 
 /**
  * FXML Controller class
@@ -26,13 +30,33 @@ public class VolunteerTableViewController implements Initializable {
     @FXML
     private TableColumn<Volunteer, Integer> volunteerIDColumn;
     @FXML
-    private TableColumn<Volunteer, String> FirstNameColumn;
+    private TableColumn<Volunteer, String> firstNameColumn;
     @FXML
     private TableColumn<Volunteer, String> lastNameColumn;
     @FXML
     private TableColumn<Volunteer, String> phoneNumberColumn;
     @FXML
     private TableColumn<Volunteer, LocalDate> birthdayColumn;
+    @FXML
+    private Button editVolunteerButton;
+    
+    /**
+     * If the edit button is pushed, pass the selected Volunteer to the NewUserView
+     * and preload it with the data.
+     */
+    public void editButtonPushed(ActionEvent event) throws IOException {
+        Volunteer volunteer = this.volunteerTable.getSelectionModel().getSelectedItem();
+        NewUserViewController npvc = new NewUserViewController();
+        
+        SceneChanger.changeScenes(event, "NewUserView.fxml", "Edit Volunteer", volunteer, npvc); 
+    }
+    
+    /**
+     * This method will switch to the NewUserView scene when the button is pushed
+     */
+    public void newVolunteerPush(ActionEvent event) throws IOException {
+        SceneChanger.changeScenes(event, "NewUserView.fxml", "Create New Volunteer");
+    }
     
     /**
      * Initializes the controller class.
@@ -41,8 +65,10 @@ public class VolunteerTableViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        editVolunteerButton.setDisable(true);
+        
         volunteerIDColumn.setCellValueFactory(new PropertyValueFactory<>("volunteerID"));
-        FirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         birthdayColumn.setCellValueFactory(new PropertyValueFactory<>("birthday"));
@@ -53,7 +79,7 @@ public class VolunteerTableViewController implements Initializable {
         catch(SQLException e) {
             System.err.println(e.getMessage());
         }
-    }       
+    }
 
     /**
      * This method will load the volunteers from the database and load them into
@@ -95,4 +121,11 @@ public class VolunteerTableViewController implements Initializable {
                 resultSet.close();
          }
     }
+     
+     /**
+      * If a user has been selected in the table, enable edit button
+      */
+     public void volunteerSelected() {
+         editVolunteerButton.setDisable(false);
+     }
 }

@@ -2,13 +2,15 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="views.VolunteerTableViewController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.VolunteerTableViewController">
     <stylesheets>
         <URL value="@volunteer.css" />
     </stylesheets>
@@ -16,7 +18,7 @@
       <VBox alignment="CENTER" layoutX="121.0" layoutY="43.0" prefHeight="400.0" prefWidth="600.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label text="List of Volunteers" />
-            <TableView fx:id="volunteerTable" prefHeight="200.0" prefWidth="200.0">
+            <TableView fx:id="volunteerTable" onMouseClicked="#volunteerSelected" prefHeight="200.0" prefWidth="200.0">
               <columns>
                 <TableColumn fx:id="volunteerIDColumn" prefWidth="77.5999755859375" text="Volunteer ID" />
                 <TableColumn fx:id="firstNameColumn" prefWidth="160.0" text="First Name" />
@@ -28,6 +30,12 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+              <items>
+                <Button mnemonicParsing="false" onAction="#newVolunteerPush" prefWidth="170.0" text="Create New Volunteer" />
+                  <Button fx:id="editVolunteerButton" mnemonicParsing="false" onAction="#editButtonPushed" prefWidth="170.0" text="Edit Volunteer" />
+              </items>
+            </ToolBar>
          </children>
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

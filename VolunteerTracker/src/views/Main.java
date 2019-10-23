@@ -19,11 +19,9 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("VolunteerTableView.fxml"));
-    
-        Scene scene = new Scene(root);
-        
+            
         primaryStage.setTitle("New Volunteer");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 }
