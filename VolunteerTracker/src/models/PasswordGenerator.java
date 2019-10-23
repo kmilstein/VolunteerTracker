@@ -3,6 +3,7 @@ package models;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 /**
  *
@@ -30,5 +31,13 @@ public class PasswordGenerator {
         }
         
         return generatedPassword;
+    }
+    
+    public static byte[] getSalt() throws NoSuchAlgorithmException {
+        SecureRandom sr = SecureRandom.getInstanceStrong();
+        byte[] salt = new byte[16];
+        sr.nextBytes(salt);
+        
+        return salt;
     }
 }
