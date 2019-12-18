@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -47,12 +48,18 @@ public class NewUserViewController implements Initializable, ControllerClass {
     private boolean imageFileChanged;
     private Volunteer volunteer;
 
+    @FXML
+    private PasswordField pwField;
+    @FXML
+    private PasswordField confirmPwField;
+
     /**
      * This method will change to the TableView without adding a user. All data
      * in the form will be post
      */
+    @FXML
     public void cancelButtonPushed(ActionEvent event) throws IOException {
-        SceneChanger.changeScenes(event, "VolunteerTableView.fxml", "All Volunteers");
+        SceneChanger.changeScenes("VolunteerTableView.fxml", "All Volunteers");
     }
 
     /**
@@ -62,6 +69,7 @@ public class NewUserViewController implements Initializable, ControllerClass {
      *
      * @param event
      */
+    @FXML
     public void chooseImageButtonPushed(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
@@ -126,32 +134,37 @@ public class NewUserViewController implements Initializable, ControllerClass {
      * a Volunteer If a volunteer was successfully created, it is updated in the
      * database.
      */
+    @FXML
     public void saveVolunteerButtonPushed(ActionEvent event) {
-        try {
-            if (volunteer != null) {
-                updateVolunteer();
-                volunteer.updateVolunteerDataBase();
-            } else {
-                if (imageFileChanged) {
-                    volunteer = new Volunteer(firstNameTextField.getText(), lastNameTextField.getText(), phoneTextField.getText(), birthday.getValue(), imageFile);
+        if (validPassword()) {
+            try {
+                if (volunteer != null) {
+                    updateVolunteer();
+                    volunteer.updateVolunteerDataBase();
                 } else {
-                    volunteer = new Volunteer(firstNameTextField.getText(), lastNameTextField.getText(), phoneTextField.getText(), birthday.getValue());
+                    if (imageFileChanged) {
+                        volunteer = new Volunteer(firstNameTextField.getText(), lastNameTextField.getText(),
+                                phoneTextField.getText(), birthday.getValue(), imageFile, pwField.getText());
+                    } else {
+                        volunteer = new Volunteer(firstNameTextField.getText(), lastNameTextField.getText(),
+                                phoneTextField.getText(), birthday.getValue(), pwField.getText());
+                    }
+
+                    errMsgLabel.setText("");
+                    volunteer.insertIntoDataBase();
                 }
-                errMsgLabel.setText("");
-                volunteer.insertIntoDataBase();
+
+                SceneChanger.changeScenes("VolunteerTableView.fxml", "All Volunteers");
+
+            } catch (Exception e) {
+                errMsgLabel.setText(e.getMessage());
+                System.err.println(e);
             }
-
-            SceneChanger.changeScenes(event, "VolunteerTableView.fxml", "All Volunteers");
-
-        } catch (Exception e) {
-            errMsgLabel.setText(e.getMessage());
-            System.err.println(e);
         }
     }
 
     @Override
     public void preloadData(Volunteer volunteer) {
-        this.volunteer = volunteer;
         firstNameTextField.setText(volunteer.getFirstName());
         lastNameTextField.setText(volunteer.getLastName());
         birthday.setValue(volunteer.getBirthday());
@@ -168,6 +181,7 @@ public class NewUserViewController implements Initializable, ControllerClass {
             System.err.println(e.getMessage());
         }
     }
+
     /**
      * This method will read from the GUI fields and update the volunteer object
      */
@@ -178,5 +192,16 @@ public class NewUserViewController implements Initializable, ControllerClass {
         volunteer.setBirthday(this.birthday.getValue());
         volunteer.setImageFile(imageFile);
         volunteer.copyImageFile();
+    }
+
+    /**
+     * This method will validate that the passwords match
+     */
+    private boolean validPassword() {
+        if (pwField.getText().length() < 5) {
+        errMsgLabel.setText("Password must be greater than 5 characters in length");
+            return false;
+        }
+        return (this.pwField.getText().equals(this.confirmPwField.getText()));
     }
 }

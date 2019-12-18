@@ -10,18 +10,20 @@ import javafx.stage.Stage;
  *
  * @author Ksenia
  */
-public class Main extends Application{
+public class Main extends Application {
 
-    public static void main(String[] args ) {
+    public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("VolunteerTableView.fxml"));
-            
+
         primaryStage.setTitle("New Volunteer");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+        
+        SceneChanger.setStage(primaryStage);
     }
 }
