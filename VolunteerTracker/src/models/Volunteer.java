@@ -266,4 +266,44 @@ public final class Volunteer {
             }
         }
     }
+    
+    /**
+     * This method will record the hours worked for the volunteer.
+     * @param dateWorked - must be in current year and previous current date
+     * @param hoursWorked - must be less than 18 hours
+     */
+    public void logHours(LocalDate dateWorked, int hoursWorked) throws SQLException {
+        if (dateWorked.isAfter(LocalDate.now())) 
+            throw new IllegalArgumentException("Date worked cannot be in the future");  
+        
+        if (dateWorked.isBefore(LocalDate.now().minusYears(1))) 
+            throw new IllegalArgumentException("Date worked must be within the last 12 months");
+         
+        if (hoursWorked < 0 || hoursWorked > 18 ) 
+            throw new IllegalArgumentException("Hours worked must be in the range of 0-18");
+        
+        Connection conn = null;
+        PreparedStatement ps = null;
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/volunteer?autoReconnect=true&useSSL=false",
+                    "root", "MySQLPassword1");
+            String sql = "INSERT INTO hoursWorked(volunteerID, hoursWorked, dateWorked) VALUES (?, ?, ?)";
+            ps = conn.prepareStatement(sql);
+            Date dw = Date.valueOf(dateWorked);
+            
+            ps.setInt(1, volunteerID);
+            ps.setDate(2, dw);
+            ps.setInt(3, hoursWorked);
+             
+           ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            if (conn != null)
+                conn.close();
+            if (ps != null)
+                ps.close();
+        }
+    }
 }
