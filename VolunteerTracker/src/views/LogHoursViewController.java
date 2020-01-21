@@ -17,6 +17,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import models.Volunteer;
 import java.sql.*;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 
 /**
  * FXML Controller class
@@ -28,7 +30,7 @@ public class LogHoursViewController implements Initializable, ControllerClass {
     @FXML
     private DatePicker datePicker;
     @FXML
-    private TextField hoursWorkedTextField;
+    private Spinner hoursWorkedSpinner;
     @FXML
     private Label volunteerIDLabel;
     @FXML
@@ -46,6 +48,9 @@ public class LogHoursViewController implements Initializable, ControllerClass {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         errMsgLabel.setText("");
+        SpinnerValueFactory<Integer> valueFactory = 
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 18, 8);
+        hoursWorkedSpinner.setValueFactory(valueFactory);
     }    
 
     @Override
@@ -55,7 +60,6 @@ public class LogHoursViewController implements Initializable, ControllerClass {
         firstNameLabel.setText(volunteer.getFirstName());
         lastNameLabel.setText(volunteer.getLastName());
         datePicker.setValue(LocalDate.now());
-        hoursWorkedTextField.setText("8");
     }
     
     /**
@@ -63,7 +67,7 @@ public class LogHoursViewController implements Initializable, ControllerClass {
      */
     public void saveButtonPushed(ActionEvent event) {
         try {
-            volunteer.logHours(datePicker.getValue(), Integer.parseInt(hoursWorkedTextField.getText()));
+            volunteer.logHours(datePicker.getValue(), (int) hoursWorkedSpinner.getValue());
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         } catch (IllegalArgumentException e) {
