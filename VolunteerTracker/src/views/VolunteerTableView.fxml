@@ -11,12 +11,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.VolunteerTableViewController">
+<AnchorPane id="AnchorPane" prefHeight="446.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.VolunteerTableViewController">
     <stylesheets>
         <URL value="@volunteer.css" />
     </stylesheets>
    <children>
-      <VBox alignment="CENTER" layoutX="121.0" layoutY="43.0" prefHeight="400.0" prefWidth="600.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="TOP_CENTER" layoutX="121.0" layoutY="43.0" prefHeight="446.0" prefWidth="800.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label styleClass="header" text="List of Volunteers" />
             <TableView fx:id="volunteerTable" onMouseClicked="#volunteerSelected" prefHeight="200.0" prefWidth="200.0">
@@ -31,15 +31,20 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="546.0" spacing="8.0">
+            <HBox alignment="CENTER" prefHeight="33.0" prefWidth="760.0" spacing="8.0">
                <children>
-                <Button mnemonicParsing="false" onAction="#newVolunteerPush" prefWidth="170.0" text="Create New Volunteer">
+                <Button mnemonicParsing="false" onAction="#newVolunteerPush" prefHeight="30.0" prefWidth="180.0" text="Create New Volunteer">
                      <font>
                         <Font size="9.0" />
                      </font>
                   </Button>
-                  <Button fx:id="editVolunteerButton" mnemonicParsing="false" onAction="#editButtonPushed" prefWidth="170.0" text="Edit Volunteer" />
-                  <Button fx:id="logHoursButton" mnemonicParsing="false" onAction="#logHoursButtonPushed" prefWidth="170.0" text="Log Hours" />
+                  <Button fx:id="editVolunteerButton" mnemonicParsing="false" onAction="#editButtonPushed" prefWidth="180.0" text="Edit Volunteer" />
+                  <Button fx:id="logHoursButton" mnemonicParsing="false" onAction="#logHoursButtonPushed" prefWidth="180.0" text="Log Hours" />
+               </children>
+            </HBox>
+            <HBox prefHeight="46.0" prefWidth="760.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#monthlyHoursButtonPushed" prefWidth="180.0" text="View Hours" />
                </children>
             </HBox>
          </children>

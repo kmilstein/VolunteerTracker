@@ -139,6 +139,13 @@ public class VolunteerTableViewController implements Initializable {
         LogHoursViewController lhvc = new LogHoursViewController();
         SceneChanger.changeScenes("LogHoursView.fxml", "Log Hours View", volunteer, lhvc);
     }
+    
+    /**
+     * Change scenes to monthly report view when pushed
+     */
+    public void monthlyHoursButtonPushed(ActionEvent event) throws IOException {
+        SceneChanger.changeScenes("MonthlyHoursView.fxml", "View Hours");
+    }
 
     /**
      * If a user has been selected in the table, enable edit button
