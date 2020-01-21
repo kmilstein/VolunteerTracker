@@ -5,6 +5,7 @@
  */
 package views;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -68,5 +69,12 @@ public class LogHoursViewController implements Initializable, ControllerClass {
         } catch (IllegalArgumentException e) {
             errMsgLabel.setText(e.getMessage());
         }
+    }
+    
+        /**
+     * This will return the user to the table of all volunteers
+     */
+    public void cancelButtonPushed(ActionEvent event) throws IOException {
+        SceneChanger.changeScenes("VolunteerTableView.fxml", "All Volunteers");
     }
 }

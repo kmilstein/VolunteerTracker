@@ -38,11 +38,14 @@ public class VolunteerTableViewController implements Initializable {
     private TableColumn<Volunteer, LocalDate> birthdayColumn;
     @FXML
     private Button editVolunteerButton;
+    @FXML
+    private Button logHoursButton;
 
     /**
      * If the edit button is pushed, pass the selected Volunteer to the
      * NewUserView and preload it with the data.
      */
+    @FXML
     public void editButtonPushed(ActionEvent event) throws IOException {
         Volunteer volunteer = volunteerTable.getSelectionModel().getSelectedItem();
         NewUserViewController npvc = new NewUserViewController();
@@ -54,6 +57,7 @@ public class VolunteerTableViewController implements Initializable {
      * This method will switch to the NewUserView scene when the button is
      * pushed
      */
+    @FXML
     public void newVolunteerPush(ActionEvent event) throws IOException {
         SceneChanger.changeScenes("NewUserView.fxml", "Create New Volunteer");
     }
@@ -67,6 +71,7 @@ public class VolunteerTableViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         editVolunteerButton.setDisable(true);
+        logHoursButton.setDisable(true);
 
         volunteerIDColumn.setCellValueFactory(new PropertyValueFactory<>("volunteerID"));
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -125,11 +130,22 @@ public class VolunteerTableViewController implements Initializable {
             }
         }
     }
+    
+    /**
+     * This method will open the loghours view 
+     */
+    public void logHoursButtonPushed(ActionEvent event) throws IOException {
+        Volunteer volunteer = volunteerTable.getSelectionModel().getSelectedItem();
+        LogHoursViewController lhvc = new LogHoursViewController();
+        SceneChanger.changeScenes("LogHoursView.fxml", "Log Hours View", volunteer, lhvc);
+    }
 
     /**
      * If a user has been selected in the table, enable edit button
      */
+    @FXML
     public void volunteerSelected() {
         editVolunteerButton.setDisable(false);
+        logHoursButton.setDisable(false);
     }
 }

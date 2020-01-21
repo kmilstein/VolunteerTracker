@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
+import javafx.event.ActionEvent;
 
 /**
  *
@@ -288,13 +289,13 @@ public final class Volunteer {
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/volunteer?autoReconnect=true&useSSL=false",
                     "root", "MySQLPassword1");
-            String sql = "INSERT INTO hoursWorked(volunteerID, hoursWorked, dateWorked) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO hoursWorked (volunteerID, hoursWorked, dateWorked) VALUES (?, ?, ?)";
             ps = conn.prepareStatement(sql);
             Date dw = Date.valueOf(dateWorked);
             
             ps.setInt(1, volunteerID);
-            ps.setDate(2, dw);
-            ps.setInt(3, hoursWorked);
+            ps.setInt(2, hoursWorked);
+            ps.setDate(3, dw);
              
            ps.executeUpdate();
         } catch (SQLException e) {
