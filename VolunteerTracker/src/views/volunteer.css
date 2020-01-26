@@ -24,6 +24,10 @@
     -fx-font-size: 36pt;
 }
 
-.chart-bar {
+.default-color0.chart-bar {
     -fx-bar-fill: lightblue;
+}
+
+.default-color1.chart-bar {
+    -fx-bar-fill: lightgreen;
 }

@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package views;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -14,6 +11,8 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import java.sql.*;
+import java.time.LocalDate;
+import javafx.event.ActionEvent;
 
 /**
  * FXML Controller class
@@ -29,22 +28,27 @@ public class MonthlyHoursViewController implements Initializable {
     @FXML
     private CategoryAxis months;
 
-    private XYChart.Series series;
+    private XYChart.Series currentYearSeries;
+    private XYChart.Series previousYearSeries;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        series = new XYChart.Series<>();
+        currentYearSeries = new XYChart.Series<>();
+        previousYearSeries = new XYChart.Series<>();
 
+        currentYearSeries.setName(Integer.toString(LocalDate.now().getYear()));
+        previousYearSeries.setName(Integer.toString(LocalDate.now().getYear()-1));
+        
         try {
             populateSeriesFromDB();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-
-        barChart.getData().addAll(series);
+                 
+        barChart.getData().addAll(previousYearSeries, currentYearSeries);
     }
 
     /**
@@ -63,12 +67,17 @@ public class MonthlyHoursViewController implements Initializable {
 
             String sql = "SELECT year(dateWorked), monthname(dateWorked), SUM(hoursWorked) "
                     + "FROM hoursWorked "
-                    + "GROUP BY YEAR (dateWorked), MONTH(dateWorked);";
+                    + "GROUP BY YEAR (dateWorked), MONTH(dateWorked) "
+                    + "ORDER BY YEAR(dateWorked), MONTH(dateWorked);";
 
             resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
-                series.getData().add(new XYChart.Data(resultSet.getString(2), resultSet.getInt(3)));
+                if (resultSet.getInt(1) == LocalDate.now().getYear()) {
+                    currentYearSeries.getData().add(new XYChart.Data(resultSet.getString(2), resultSet.getInt(3)));
+                } else if (resultSet.getInt(1) == LocalDate.now().getYear()-1) {
+                    previousYearSeries.getData().add(new XYChart.Data(resultSet.getString(2), resultSet.getInt(3)));
+                }
             }
 
         } catch (SQLException e) {
@@ -85,5 +94,11 @@ public class MonthlyHoursViewController implements Initializable {
             }
         }
     }
-
+    
+    /**
+     * This method will return the scene to the VolunteerTableView
+     */
+    public void backButtonPushed(ActionEvent event) throws IOException {
+        SceneChanger.changeScenes("VolunteerTableView.fxml", "All Volunteers");
+    }
 }

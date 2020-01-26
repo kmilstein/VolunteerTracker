@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="views.MonthlyHoursViewController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.MonthlyHoursViewController">
     <stylesheets>
         <URL value="@volunteer.css" />
     </stylesheets>
@@ -27,6 +27,6 @@
             </BarChart>
          </children>
       </VBox>
-      <Button layoutX="740.0" layoutY="555.0" mnemonicParsing="false" text="Back" />
+      <Button layoutX="740.0" layoutY="555.0" mnemonicParsing="false" onAction="#backButtonPushed" text="Back" />
    </children>
 </AnchorPane>
