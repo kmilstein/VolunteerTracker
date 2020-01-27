@@ -114,8 +114,8 @@ public class VolunteerTableViewController implements Initializable {
                 newVolunteer.setVolunteerID(resultSet.getInt("volunteerID"));
                 newVolunteer.setImageFile(new File(resultSet.getString("imageFile")));
                 volunteers.add(newVolunteer);
-            }
-            volunteerTable.getItems().addAll(volunteers);
+            } 
+           volunteerTable.getItems().addAll(volunteers);
         } catch (Exception e) {
             System.err.println(e);
         } finally {

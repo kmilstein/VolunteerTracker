@@ -1,4 +1,3 @@
-
 package views;
 
 import java.io.IOException;
@@ -30,6 +29,7 @@ public class MonthlyHoursViewController implements Initializable {
 
     private XYChart.Series currentYearSeries;
     private XYChart.Series previousYearSeries;
+    private XYChart.Series twoYearsAgoSeries;
 
     /**
      * Initializes the controller class.
@@ -38,17 +38,19 @@ public class MonthlyHoursViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         currentYearSeries = new XYChart.Series<>();
         previousYearSeries = new XYChart.Series<>();
+        twoYearsAgoSeries = new XYChart.Series<>();
 
-        currentYearSeries.setName(Integer.toString(LocalDate.now().getYear()));
-        previousYearSeries.setName(Integer.toString(LocalDate.now().getYear()-1));
-        
+        currentYearSeries.setName("Current Year");
+        previousYearSeries.setName("Previous Year");
+        twoYearsAgoSeries.setName("Two Years Ago");
+
         try {
             populateSeriesFromDB();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-                 
-        barChart.getData().addAll(previousYearSeries, currentYearSeries);
+
+        barChart.getData().addAll(currentYearSeries, previousYearSeries, twoYearsAgoSeries);
     }
 
     /**
@@ -65,9 +67,9 @@ public class MonthlyHoursViewController implements Initializable {
 
             statement = conn.createStatement();
 
-            String sql = "SELECT year(dateWorked), monthname(dateWorked), SUM(hoursWorked) "
+            String sql = "SELECT year(dateWorked), month(dateWorked), SUM(hoursWorked) "
                     + "FROM hoursWorked "
-                    + "GROUP BY YEAR (dateWorked), MONTH(dateWorked) "
+                    + "GROUP BY YEAR(dateWorked), MONTH(dateWorked) "
                     + "ORDER BY YEAR(dateWorked), MONTH(dateWorked);";
 
             resultSet = statement.executeQuery(sql);
@@ -77,6 +79,8 @@ public class MonthlyHoursViewController implements Initializable {
                     currentYearSeries.getData().add(new XYChart.Data(resultSet.getString(2), resultSet.getInt(3)));
                 } else if (resultSet.getInt(1) == LocalDate.now().getYear()-1) {
                     previousYearSeries.getData().add(new XYChart.Data(resultSet.getString(2), resultSet.getInt(3)));
+                } else if (resultSet.getInt(1) == LocalDate.now().getYear()-2) {
+                    twoYearsAgoSeries.getData().add(new XYChart.Data(resultSet.getString(2), resultSet.getInt(3)));
                 }
             }
 
@@ -94,7 +98,7 @@ public class MonthlyHoursViewController implements Initializable {
             }
         }
     }
-    
+
     /**
      * This method will return the scene to the VolunteerTableView
      */
